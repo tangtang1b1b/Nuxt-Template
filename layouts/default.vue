@@ -1,11 +1,11 @@
 <script setup>
 const data = ref([
   {
-    content: '首頁',
+    content: 'Home',
     url:'/',
   },
   {
-    content: 'demo',
+    content: 'Demo',
     url:'/demo',
   },
 ])

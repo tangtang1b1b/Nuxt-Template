@@ -36,7 +36,8 @@ export default defineNuxtConfig({
         autoImports: ['defineStore', 'acceptHMRUpdate'],
       }
     ],
-    '@vite-pwa/nuxt'
+    '@vite-pwa/nuxt',
+    '@vueuse/nuxt',
   ],
   pinia: {
     autoImports: [
@@ -72,6 +73,21 @@ export default defineNuxtConfig({
         },
       ],
     },
+    workbox: {
+      runtimeCaching: [
+        {
+          urlPattern: '.*\\.(?:css|js|json|html|png|jpg|jpeg|gif|svg)$',
+          handler: 'StaleWhileRevalidate',
+          options: {
+            cacheName: 'assets-cache',
+            expiration: {
+              maxEntries: 100,
+              maxAgeSeconds: 7 * 24 * 60 * 60, // 7 days
+            },
+          },
+        },
+      ],
+    },
     devOptions: {
       enabled: true,
       type: 'module',
@@ -85,11 +101,6 @@ export default defineNuxtConfig({
         customDomId: '__svg__icons__dom__',
       })
     ]
-  },
-  workbox: {
-    workboxOptions: {
-      runtimeCaching: [],
-    }
   },
   css: ['~/assets/css/tailwind.css'],
   postcss: {
