@@ -10,17 +10,20 @@
     "postinstall": "nuxt prepare"
   },
   "dependencies": {
+    "@nuxtjs/i18n": "^9.1.2",
     "@pinia/nuxt": "^0.5.3",
+    "@studio-freight/lenis": "^1.0.42",
     "@vueuse/core": "^11.0.1",
     "@vueuse/nuxt": "^11.0.1",
     "gsap": "^3.12.5",
     "nuxt": "^3.12.4",
     "pinia": "^2.2.2",
-    "vue": "latest"
+    "swiper": "^11.1.14",
+    "vue": "latest",
+    "yup": "^1.4.0"
   },
   "devDependencies": {
     "@eslint/js": "^9.9.0",
-    "@vite-pwa/nuxt": "^0.9.1",
     "autoprefixer": "^10.4.20",
     "eslint": "^9.9.0",
     "eslint-config-prettier": "^9.1.0",

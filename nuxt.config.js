@@ -4,118 +4,124 @@ import path from 'path'
 
 export default defineNuxtConfig({
   ssr: true,
-  compatibilityDate: '2024-04-03',
-  head: {
-    title: '超速柴柴',
-    htmlAttrs: {
-        lang: 'zh-TW'
+
+  app: {
+    router: {
+      base: process.env.APP_URL || '/',
     },
-    meta: [
+    head: {
+      title: process.env.APP_TITLE,
+      htmlAttrs: {
+        lang: process.env.APP_DEFAULT_LANG,
+      },
+      meta: [
         { charset: 'utf-8' },
         { name: 'viewport', content: 'width=device-width, initial-scale=1' },
-        { hid: 'description', name: 'description', content: '' },
+        { hid: 'description', name: 'description', content: process.env.APP_DESC },
         { name: 'format-detection', content: 'telephone=no' },
-        { property: 'og:title', content: '超速柴柴' },
-        { property: 'og:description', content: '超速柴柴' },
-        { property: 'og:site_name', content: '超速柴柴' },
-        { property: 'og:locale', content: 'zh_TW' }
-    ],
-    link: [
-        { rel: 'icon', type: 'image/x-icon', href: '/favicon.ico' },
+        { property: 'og:title', content: process.env.APP_TITLE },
+        { property: 'og:description', content: process.env.APP_DESC },
+        { property: 'og:site_name', content: process.env.APP_TITLE },
+        { property: 'og:locale', content: process.env.APP_DEFAULT_LANG },
+        { property: 'og:image:width', content: '1200' },
+        { property: 'og:image:height', content: '630' },
+        { property: 'og:image', content: `${process.env.APP_URL}/og_image.jpg` },
+        { name: 'google-site-verification', content: process.env.GOOGLE_SITE_VERIFICATION },
+      ],
+      link: [
+        { rel: 'icon', type: 'image/x-icon', href: `${process.env.APP_URL}/favicon.ico` },
+        { rel: 'apple-touch-icon', sizes: '180x180', href: `${process.env.APP_URL}/apple-touch-icon.png` },
+        { rel: 'icon', type: 'image/png', sizes: '192x192', href: `${process.env.APP_URL}/android-chrome-192x192.png` },
+        { rel: 'icon', type: 'image/png', sizes: '512x512', href: `${process.env.APP_URL}/android-chrome-512x512.png` },
         { rel: 'stylesheet', href: 'https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap' },
-    ],
-    noscript: [
-      // <noscript>JavaScript is required</noscript>
-      { children: 'JavaScript is required' }
-    ]
+        { rel: 'stylesheet', href: 'https://fonts.googleapis.com/css2?family=Cinzel:wght@400..900&display=swap' },
+        { rel: 'stylesheet', href: 'https://fonts.googleapis.com/css2?family=Noto+Serif+TC:wght@200..900&display=swap' },
+      ],
+      noscript: [
+        // <noscript>JavaScript is required</noscript>
+        { children: 'JavaScript is required' },
+      ],
+    },
+    pageTransition: {
+      name: 'page',
+      mode: 'out-in',
+    },
   },
+
   modules: [
     [
       '@pinia/nuxt',
       {
         autoImports: ['defineStore', 'acceptHMRUpdate'],
-      }
+      },
     ],
-    '@vite-pwa/nuxt',
     '@vueuse/nuxt',
+    '@nuxtjs/i18n',
   ],
+
   pinia: {
-    autoImports: [
-      'defineStore',
-    ],
+    autoImports: ['defineStore'],
   },
-  pwa: {
-    manifest: {
-      name: '超速柴柴',
-      short_name: '超速柴柴',
-      description: '不要看路看儀表',
-      theme_color: '#fff',
-      icons: [
-        {
-          src: 'dog64.png',
-          sizes: '64x64',
-          type: 'image/png',
-        },
-        {
-          src: 'dog144.png',
-          sizes: '144x144',
-          type: 'image/png',
-        },
-        {
-          src: 'dog192.png',
-          sizes: '192x192',
-          type: 'image/png',
-        },
-        {
-          src: 'dog512.png',
-          sizes: '512x512',
-          type: 'image/png',
-        },
-      ],
-    },
-    workbox: {
-      runtimeCaching: [
-        {
-          urlPattern: '.*\\.(?:css|js|json|html|png|jpg|jpeg|gif|svg)$',
-          handler: 'StaleWhileRevalidate',
-          options: {
-            cacheName: 'assets-cache',
-            expiration: {
-              maxEntries: 100,
-              maxAgeSeconds: 7 * 24 * 60 * 60, // 7 days
-            },
-          },
-        },
-      ],
-    },
-    devOptions: {
-      enabled: true,
-      type: 'module',
-    },
-  },
+
   vite: {
-    plugins:  [
+    plugins: [
       createSvgIconsPlugin({
         iconDirs: [path.resolve(process.cwd(), 'assets/icons')],
         symbolId: '[dir]/[name]',
         customDomId: '__svg__icons__dom__',
-      })
-    ]
+      }),
+    ],
   },
+
+  i18n: {
+    defaultLocale: 'zh',
+    locales: [
+      {
+        code: 'en',
+        iso: 'en-US',
+        file: 'en.json',
+        name: 'English',
+      },
+      {
+        code: 'zh',
+        iso: 'zh-TW',
+        file: 'zh.json',
+        name: '中文',
+      },
+    ],
+    strategy: 'prefix_except_default',
+    detectBrowserLanguage: {
+      useCookie: true,
+      cookieKey: 'i18n_redirected',
+      redirectOn: 'root',
+    },
+  },
+
   css: ['~/assets/css/tailwind.css'],
+
   postcss: {
     plugins: {
       tailwindcss: {},
       autoprefixer: {},
     },
   },
+
   runtimeConfig: {
+    APP_TITLE: process.env.APP_TITLE,
+    APP_DESC: process.env.APP_DESC,
     APP_URL: process.env.APP_URL,
-    API_URL: process.env.API_URL,
+    APP_API: process.env.APP_API,
     public: {
+      APP_TITLE: process.env.APP_TITLE,
+      APP_KEYWORDS: process.env.APP_KEYWORDS,
+      APP_DESC: process.env.APP_DESC,
       APP_URL: process.env.APP_URL,
-      API_URL: process.env.API_URL
-    }
+      APP_API: process.env.APP_API,
+      API_TOKEN: process.env.API_TOKEN,
+      GA_ID: process.env.GA_ID,
+    },
   },
-  devtools: { enabled: true },
+
+  devtools: { enabled: process.env.NODE_ENV === 'development' },
+  compatibilityDate: '2025-01-23',
 })

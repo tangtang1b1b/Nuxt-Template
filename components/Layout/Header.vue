@@ -1,5 +1,7 @@
 <script setup>
-const { $gsap } = useNuxtApp()
+const { locale } = useI18n()
+import { useAllStore } from '@/store/all'
+const { isScroll } = toRefs(useAllStore())
 const props = defineProps({
   data: {
     type: Array,
@@ -7,43 +9,41 @@ const props = defineProps({
   },
 })
 const { data } = toRefs(props)
-
-const imageRef = ref(null)
-const imageRefAni = ref(null)
-const imageMove = () => {
-  imageRefAni.value = $gsap.to(imageRef.value, {
-    x: 100,
-    repeat: -1,
-    duration: 2,
-    ease: 'bounce.out',
-  })
-}
 onMounted(() => {
-  imageMove()
+  window.addEventListener('scroll', () => {
+    if (window.scrollY > 0) {
+      isScroll.value = true
+    } else {
+      isScroll.value = false
+    }
+  })
 })
-onUnmounted(() => {
-  if (imageRefAni.value) {
-    imageRefAni.value.kill()
-  }
-})
+onUnmounted(() => {})
 </script>
 
 <template>
-  <div class="shadow-nav fixed top-0 flex h-[75px] w-full items-center justify-between px-5 bg-white z-50">
-    <div class="h-full">
-      <img ref="imageRef" class="h-full object-cover" :src="fetchImg('/dog512.png')" alt="" />
+  <header :class="[isScroll ? 'shadow-nav' : '']" class="fixed left-0 top-0 z-100 h-[70px] w-full bg-txt-light">
+    <div class="z-50 mx-auto flex size-full justify-between max-w-screen-3xl items-center bg-txt-light px-5 duration-300">
+      <div class="flex h-full w-40 items-center justify-center">
+        <NuxtLinkLocale to="/" class="size-full content-center">
+          <img class="w-full" :src="fetchImg('/images/logo.png')" alt="logo" />
+        </NuxtLinkLocale>
+      </div>
+      <!-- <ul class="flex size-full justify-end dev-red">
+        <li
+          v-for="item in data"
+          :key="item.name"
+          class="flex h-full items-center justify-center text-white duration-300 hover:text-[#75fa90]"
+        >
+          <nuxt-link :to="item.url" class="h-full content-center px-5">{{ item.name }}</nuxt-link>
+        </li>
+      </ul> -->
+      <div class="flex divide-x text-white font-Montserrat">
+        <SwitchLocalePathLink locale="zh" :class="locale === 'zh' ? 'text-txt-super-light' : ''" class="px-2 hover:text-txt-super-light duration-300">中文</SwitchLocalePathLink>
+        <SwitchLocalePathLink locale="en" :class="locale === 'en' ? 'text-txt-super-light' : ''" class="px-2 hover:text-txt-super-light duration-300">English</SwitchLocalePathLink>
+      </div>
     </div>
-    <ul class="flex h-full w-1/3 justify-between">
-      <nuxt-link
-        :to="item.url"
-        class="size-full cursor-pointer content-center text-center duration-300 hover:bg-black hover:text-white"
-        v-for="(item, index) in data"
-        :key="`${item.content}_${index}`"
-      >
-        {{ item.content }}
-      </nuxt-link>
-    </ul>
-  </div>
+  </header>
 </template>
 
 <style scoped></style>

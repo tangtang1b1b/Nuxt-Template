@@ -1,11 +1,9 @@
-<script setup>
-</script>
+<script setup></script>
 
 <template>
-  <div class="bg-yellow-500 h-fit">
-    <p class="font-bold text-gray-500">這是Footer</p>
-  </div>
+  <footer class="flex h-[45px] w-full items-center justify-center bg-black text-[15px] font-medium leading-[21.72px] text-white">
+    大樹醫藥股份有限公司版權所有2024 © All rights reserved.
+  </footer>
 </template>
 
-<style scoped>
-</style>
+<style scoped></style>

@@ -8,8 +8,12 @@ const props = defineProps({
     type: String,
     default: '#333',
   },
+  size: {
+    type: Number,
+    default: 24,
+  }
 })
-const { name, color } = toRefs(props)
+const { name, color, size } = toRefs(props)
 
 const svgName = computed(() => {
   return name.value.includes('/') ? `#${name.value}` : `#/${name.value}`
@@ -18,7 +22,7 @@ const svgName = computed(() => {
 </script>
 
 <template>
-  <svg aria-hidden="true" class="">
+  <svg aria-hidden="true" :style="{width: `${size}px`, height: `${size}px`}">
     <use :xlink:href="svgName" :fill="color" />
   </svg>
 </template>

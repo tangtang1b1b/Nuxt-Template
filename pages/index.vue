@@ -1,14 +1,26 @@
-<script setup></script>
+<script setup>
+const { t } = useI18n()
+const dot = ref('')
+const dotAnimation = ref(null)
 
+const init = () => {
+  dotAnimation.value = setInterval(() => {
+    dot.value += '.'
+    if (dot.value.length > 3) {
+      dot.value = '.'
+    }
+  }, 500)
+}
+
+onMounted(() => {
+  init()
+})
+</script>
 <template>
-  <div class="flex h-[calc(100vh-75px)] flex-col items-center justify-center gap-3 bg-white">
-    <p class="text-center text-xl font-bold">模板</p>
-    <div class="flex w-full justify-center">
-      <nuxt-link class="w-[250px]" to="/demo">
-        <AtomButton class="bg-black text-xl text-white duration-300 hover:bg-white hover:text-black border border-black">Demo</AtomButton>
-      </nuxt-link>
-    </div>
-    <Cursor :colorful="true" />
+  <div class="container relative flex h-screen w-full items-center justify-center text-4xl font-bold">
+    <NuxtLinkLocale to="/demo" class="relative">
+      {{ t('template') }}<span class="absolute left-full">{{ dot }}</span>
+    </NuxtLinkLocale>
   </div>
 </template>
 
