@@ -14,5 +14,5 @@ export default defineNuxtPlugin((nuxtApp) => {
   registerEffects()
 
   nuxtApp.provide('gsap', gsap)
-  nuxtApp.provide('scrollTrigger', ScrollTrigger)
+  nuxtApp.provide('ScrollTrigger', ScrollTrigger)
 })

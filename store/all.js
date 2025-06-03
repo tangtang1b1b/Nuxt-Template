@@ -4,10 +4,12 @@ export const useAllStore = defineStore('all', () =>{
   const windowWidth = ref(0)
   const allData = ref({})
   const isScroll = ref(false)
+  const isLoading = ref(false)
 
   return {
     windowWidth,
     allData,
-    isScroll
+    isScroll,
+    isLoading
   }
 })

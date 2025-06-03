@@ -3,6 +3,7 @@ import { useAllStore } from '@/store/all';
 const { allData } = toRefs(useAllStore())
 const { data } = await fetchRestful({ apiPath: '/data/index.json' })
 allData.value = data
+await useLoadingHandler().setLoadingComplete()
 </script>
 
 <template>
