@@ -1,9 +1,7 @@
-const fetchGraph = async ({ apiPath = null, token = null, query = null, method = 'GET', client = true, body = null }) => {
+const fetchGraph = async ({ key = null, apiPath = null, token = null, query = null, method = 'POST', client = true, body = null }) => {
   const config = useRuntimeConfig()
 
   let APP_API = client ? config.public.APP_API : config.APP_API
-
-  let apiUrl = body ? APP_API : `${APP_API}?query=${encodeURIComponent(query)}`
 
   let headers = {
     'Content-Type': 'application/json',
@@ -16,11 +14,12 @@ const fetchGraph = async ({ apiPath = null, token = null, query = null, method =
   let fetchOptions = {
     method: method,
     headers: headers,
-    body: method !== 'GET' ? JSON.stringify({ query: body }) : null,
+    key: key,
+    body: JSON.stringify({ query }),
   }
 
   try {
-    const { data, error } = await useFetch(apiUrl, fetchOptions)
+    const { data, error } = await useFetch(APP_API, fetchOptions)
 
     if (error.value) {
       throw new Error(error)
