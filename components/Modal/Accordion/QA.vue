@@ -3,26 +3,24 @@ import { useAllStore } from '@/store/all'
 const { windowWidth } = toRefs(useAllStore())
 const props = defineProps({
   data: {
-    type: Array,
-    default: () => [],
+    type: Object,
+    default: () => {},
   },
 })
 const { data } = toRefs(props)
 
-const content = ref(null)
+const content = ref()
 const contentHeight = ref(0)
-const paddingNum = ref(16)
 const isOpen = ref(false)
 
 const init = () => {
-  contentHeight.value = content.value.getBoundingClientRect().height + paddingNum.value * 2
+  contentHeight.value = content.value.scrollHeight
 }
 
 onMounted(() => {
   init()
   watch(windowWidth, () => {
-    isOpen.value = false 
-    contentHeight.value = 0
+    isOpen.value = false
     nextTick(() => {
       init()
     })
@@ -35,7 +33,7 @@ onMounted(() => {
     <div class="relative flex flex-col content-center overflow-hidden rounded-md border text-lg font-bold">
       <div
         @click="isOpen = !isOpen"
-        class="flex h-auto py-2 cursor-pointer select-none items-center justify-between bg-[#eee] px-5 duration-300 hover:bg-[#e0e0e0]"
+        class="flex h-auto cursor-pointer select-none items-center justify-between bg-[#eee] px-5 py-2 duration-300 hover:bg-[#e0e0e0]"
       >
         <div class="">
           <slot name="question">
@@ -46,15 +44,11 @@ onMounted(() => {
       </div>
       <div class="pointer-events-none">
         <div
-          :style="{
-            height: isOpen ? `${contentHeight}px` : contentHeight === 0 ? 'auto' : '0',
-            paddingTop: isOpen ? `${paddingNum}px` : '0',
-            paddingBottom: isOpen ? `${paddingNum}px` : '0',
-          }"
           ref="content"
-          class="bg-white px-5 text-md duration-300"
+          :style="{ height: isOpen ? `${contentHeight}px` : '0' }"
+          class="whitespace-pre-line bg-white text-md duration-300"
         >
-          {{ data.desc }}
+          <p class="px-6 py-4">{{ data.desc }}</p>
         </div>
       </div>
     </div>

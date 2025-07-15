@@ -7,6 +7,7 @@ export default {
     "./plugins/**/*.{js,ts}",
     "./nuxt.config.{js,ts}",
     "./app.{js,ts,vue}",
+    "./error.{js,ts,vue}",
     "./utils/transition.js"
   ],
   theme: {

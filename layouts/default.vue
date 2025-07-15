@@ -13,7 +13,7 @@ await useLoadingHandler().setLoadingComplete()
       <slot />
     </main>
     <LayoutFooter />
-    <div id="modalsField"></div>
+    <div id="modalsField" class="pointer-events-none fixed inset-0 z-[2000]"></div>
     <!-- <Cursor colorful /> -->
   </div>
 </template>
