@@ -38,7 +38,7 @@ const items = ref([
         </template>
       </ModalSliderCenter>
       <h2 class="text-2xl font-bold mb-5 mt-10">Thumb</h2>
-      <ModalSliderThumb id="Thumb_slider" pagination-id="center_slider_Pagination" :slide-data="items" :autoplay="false" />
+      <ModalSliderThumb id="Thumb_slider" id2="Thumb_slider2" pagination-id="Thumb_slider_Pagination" :slide-data="items" :autoplay="false" />
     </div>
   </div>
 </template>

@@ -31,10 +31,10 @@ const closeModal = () => {
 <template>
   <div class="fixed inset-0" v-if="modelValue">
     <Teleport to="#modalsField">
-      <AtomBackdrop :is-open="isOpen" @click="closeModal" />
+      <AtomBackdrop class="pointer-events-auto" :is-open="isOpen" @click="closeModal" />
       <Transition name="fade" appear>
         <div
-          class="absolute left-1/2 top-1/2 flex w-[700px] -translate-x-1/2 -translate-y-1/2 flex-col justify-between rounded-[22px] bg-white px-[30px] py-[18px] shadow-popup"
+          class="absolute left-1/2 pointer-events-auto top-1/2 flex w-[700px] -translate-x-1/2 -translate-y-1/2 flex-col justify-between rounded-[22px] bg-white px-[30px] py-[18px] shadow-popup"
         >
           <div>
             <ModalSliderBasic id="default_slider" pagination-id="default_slider_Pagination" :slide-data="items" :autoplay="false">

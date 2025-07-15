@@ -66,7 +66,7 @@ watch(modelValue, () => {
       <Transition name="fade" appear>
         <div
           ref="container"
-          class="absolute left-1/2 top-1/2 flex -translate-x-1/2 -translate-y-1/2 select-none flex-col justify-between overflow-hidden rounded-lg bg-white px-10 py-5 shadow-popup"
+          class="absolute pointer-events-auto left-1/2 top-1/2 flex -translate-x-1/2 -translate-y-1/2 select-none flex-col justify-between overflow-hidden rounded-lg bg-white px-10 py-5 shadow-popup"
         >
           <div>
             <div>

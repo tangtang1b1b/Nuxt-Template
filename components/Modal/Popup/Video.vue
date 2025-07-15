@@ -21,7 +21,7 @@ const closeModal = () => {
 <template>
   <div class="fixed inset-0" v-if="modelValue">
     <Teleport to="#modalsField">
-      <AtomBackdrop :is-open="isOpen" @click="closeModal" />
+      <AtomBackdrop class="pointer-events-auto" :is-open="isOpen" @click="closeModal" />
       <Transition name="fade" appear>
         <div
           class="absolute left-1/2 top-1/2 flex w-[calc(100%-80px)] lg:w-auto -translate-x-1/2 aspect-video -translate-y-1/2 flex-col justify-between rounded-lg bg-white p-2 lg:p-3 shadow-popup"
