@@ -1,29 +1,25 @@
-<script setup>
+<script setup lang="ts">
+interface Props {
+  modelValue: boolean
+  underLine?: boolean
+  time?: number // 單位 秒
+}
+
 const { $gsap } = useNuxtApp()
-const props = defineProps({
-  modelValue: {
-    type: Boolean,
-    default: false,
-  },
-  underLine: {
-    type: Boolean,
-    default: false,
-  },
-  /**
-   * 單位 秒
-   */
-  time: {
-    type: Number,
-    default: 3,
-  },
+
+const props = withDefaults(defineProps<Props>(), {
+  modelValue: false,
+  underLine: false,
+  time: 3,
 })
+
 const { modelValue, underLine, time } = toRefs(props)
 
-const emits = defineEmits(['update:modelValue'])
+const emits = defineEmits<{ 'update:modelValue': [value: boolean] }>()
 
-const isLoading = ref(false)
-const timeL = ref(null)
-const container = ref(null)
+const isLoading = ref<boolean>(false)
+const timeL = ref<HTMLDivElement | null>(null)
+const container = ref<HTMLDivElement | null>(null)
 
 const closeModal = () => {
   emits('update:modelValue', false)
@@ -66,7 +62,7 @@ watch(modelValue, () => {
       <Transition name="fade" appear>
         <div
           ref="container"
-          class="absolute pointer-events-auto left-1/2 top-1/2 flex -translate-x-1/2 -translate-y-1/2 select-none flex-col justify-between overflow-hidden rounded-lg bg-white px-10 py-5 shadow-popup"
+          class="pointer-events-auto absolute left-1/2 top-1/2 flex -translate-x-1/2 -translate-y-1/2 select-none flex-col justify-between overflow-hidden rounded-lg bg-white px-10 py-5 shadow-popup"
         >
           <div>
             <div>

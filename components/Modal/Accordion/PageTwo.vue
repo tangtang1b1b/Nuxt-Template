@@ -1,21 +1,28 @@
-<script setup>
-const props = defineProps({
+<script setup lang="ts">
+interface Props {
   data: {
-    type: Object,
-    default: () => ({
-      perPage: 10,
-      currentPage: 1,
-      lastPage: 20,
-      total: 200,
-    }),
-  },
+    perPage: number
+    currentPage: number
+    lastPage: number
+    total: number
+  }
+}
+
+const props = withDefaults(defineProps<Props>(), {
+  data: () => ({
+    perPage: 10,
+    currentPage: 1,
+    lastPage: 20,
+    total: 200,
+  }),
 })
+
 const { data } = toRefs(props)
 
-const emits = defineEmits(['upload:page'])
+const emits = defineEmits<{ 'upload:page': [value: number] }>()
 
 const currentPage = ref(1)
-const changePage = (page) => {
+const changePage = (page: number) => {
   if (page === 0 || page === data.value.lastPage + 1) return
   currentPage.value = page
   emits('upload:page', currentPage.value)

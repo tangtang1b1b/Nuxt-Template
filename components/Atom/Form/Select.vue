@@ -1,22 +1,20 @@
-<script setup>
-const props = defineProps({
-  options: {
-    type: Array,
-    default: () => [],
-  },
-  placeholder: {
-    type: String,
-    default: '請選擇',
-  },
-  id: {
-    type: String,
-    default: '',
-  },
+<script setup lang="ts">
+interface Props {
+  options?: { name: string; value: string }[]
+  placeholder?: string
+  id?: string
+}
+
+const props = withDefaults(defineProps<Props>(), {
+  options: () => [],
+  placeholder: '請選擇',
+  id: '',
 })
+
 const { options, placeholder, id } = toRefs(props)
 
-const emit = defineEmits(['update:word'])
-const selected = ref('')
+const emit = defineEmits<{ 'update:word': [value: string] }>()
+const selected = ref<string>('')
 </script>
 
 <template>
@@ -30,7 +28,7 @@ const selected = ref('')
       <option disabled value="">{{ placeholder }}</option>
       <option v-for="option in options" :key="option.value" :value="option.value">{{ option.name }}</option>
     </select>
-    <AtomIcon name="arrow" :size="14" class="absolute top-1/2 -translate-y-1/2 right-2 pointer-events-none rotate-90 text-[#94a3b8]" />
+    <AtomIcon name="arrow" :size="14" class="pointer-events-none absolute right-2 top-1/2 -translate-y-1/2 rotate-90 text-[#94a3b8]" />
   </div>
 </template>
 

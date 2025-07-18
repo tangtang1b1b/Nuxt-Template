@@ -1,10 +1,11 @@
-<script setup>
-const props = defineProps({
-  isOpen: {
-    type: Boolean,
-    default: false,
-  },
+<script setup lang="ts">
+interface Props {
+  isOpen?: boolean
+}
+const props = withDefaults(defineProps<Props>(), {
+  isOpen: false,
 })
+
 const { isOpen } = toRefs(props)
 </script>
 

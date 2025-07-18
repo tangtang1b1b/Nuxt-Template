@@ -1,17 +1,17 @@
-<script setup>
-const props = defineProps({
-  placeholder: {
-    type: String,
-    default: '請輸入',
-  },
-  id: {
-    type: String,
-    default: '',
-  },
+<script setup lang="ts">
+interface Props {
+  placeholder?: string
+  id?: string
+}
+
+const props = withDefaults(defineProps<Props>(), {
+  placeholder: '請輸入',
+  id: '',
 })
-const emits = defineEmits(['update:word'])
+
+const emits = defineEmits<{ 'update:word': [value: string] }>()
 const { placeholder, id } = toRefs(props)
-const word = ref('')
+const word = ref<string>('')
 
 const updateWord = () => {
   emits('update:word', word.value)

@@ -4,6 +4,7 @@ import Lenis from '@studio-freight/lenis'
 
 export default defineNuxtPlugin((nuxtApp) => {
   const lenis = new Lenis()
+  const router = useRouter()
 
   lenis.on('scroll', ScrollTrigger.update)
 
@@ -16,7 +17,7 @@ export default defineNuxtPlugin((nuxtApp) => {
   nuxtApp.hook('page:finish', () => {
     lenis.stop()
 
-    const route = nuxtApp.$router.currentRoute.value
+    const route = router.currentRoute.value
     if (route.meta.scrollToTop) {
       document.scrollingElement?.scrollTo({ left: 0, top: 0 })
       document.body?.scrollTo({ left: 0, top: 0 })

@@ -1,20 +1,32 @@
-<script setup>
-import { useAllStore } from '@/store/all'
-const { windowWidth } = toRefs(useAllStore())
-const props = defineProps({
+<script setup lang="ts">
+interface Props {
   data: {
-    type: Object,
-    default: () => {},
-  },
+    title: string
+    desc: string
+  }
+}
+
+import { useAllStore } from '@/store/all'
+
+const { windowWidth } = toRefs(useAllStore())
+
+const props = withDefaults(defineProps<Props>(), {
+  data: () => ({
+    title: '問題標題',
+    desc: '問題描述',
+  }),
 })
+
 const { data } = toRefs(props)
 
-const content = ref()
-const contentHeight = ref(0)
-const isOpen = ref(false)
+const content = ref<HTMLDivElement | null>(null)
+const contentHeight = ref<number>(0)
+const isOpen = ref<boolean>(false)
 
 const init = () => {
-  contentHeight.value = content.value.scrollHeight
+  if (content.value) {
+    contentHeight.value = content.value.scrollHeight
+  }
 }
 
 onMounted(() => {

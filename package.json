@@ -10,7 +10,7 @@
     "postinstall": "nuxt prepare"
   },
   "dependencies": {
-    "@nuxtjs/i18n": "^10.0.0-rc.3",
+    "@nuxtjs/i18n": "^9.1.2",
     "@pinia/nuxt": "^0.5.3",
     "@studio-freight/lenis": "^1.0.42",
     "@vueuse/core": "^11.0.1",

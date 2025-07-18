@@ -1,12 +1,14 @@
-<script setup>
+<script setup lang="ts">
+interface Props {
+  data: unknown[]
+}
+
 const { locale } = useI18n()
 import { useAllStore } from '@/store/all'
 const { isScroll } = toRefs(useAllStore())
-const props = defineProps({
-  data: {
-    type: Array,
-    default: () => [],
-  },
+
+const props = withDefaults(defineProps<Props>(), {
+  data: () => [],
 })
 const { data } = toRefs(props)
 onMounted(() => {
@@ -18,6 +20,7 @@ onMounted(() => {
     }
   })
 })
+
 onUnmounted(() => {})
 </script>
 

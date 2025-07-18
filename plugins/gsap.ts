@@ -1,3 +1,10 @@
+declare module '#app' {
+  interface NuxtApp {
+    $gsap: typeof gsap
+    $ScrollTrigger: typeof ScrollTrigger
+  }
+}
+
 import { defineNuxtPlugin } from '#app'
 import { gsap } from 'gsap'
 import { ScrollTrigger } from 'gsap/ScrollTrigger'
