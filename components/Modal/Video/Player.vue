@@ -1,27 +1,31 @@
-<script setup>
+<script setup lang="ts">
+interface Props {
+  videoId: string
+  autoplay?: boolean
+  id: string
+}
 import { useYouTubeAPI } from '@/composables/useYoutube'
-const props = defineProps({
-  videoId: {
-    type: String,
-    required: true,
-  },
-  autoplay: {
-    type: Boolean,
-    default: false,
-  },
-  id: {
-    type: String,
-    required: true,
-  },
+import type { YT } from '@/composables/useYoutube'
+
+const props = withDefaults(defineProps<Props>(), {
+  videoId: '',
+  autoplay: false,
+  id: '',
 })
 const { videoId, autoplay, id } = toRefs(props)
 
 const { loadYouTubeAPI } = useYouTubeAPI()
-const player = ref(null)
+const player = ref<YT.Player | null>(null)
 
 onMounted(async () => {
   try {
     const YT = await loadYouTubeAPI()
+    
+    // 檢查 YT 是否存在，避免 null 錯誤
+    if (!YT) {
+      console.error('YouTube API 加載失敗')
+      return
+    }
 
     player.value = new YT.Player(id.value, {
       videoId: videoId.value,
@@ -42,7 +46,7 @@ onMounted(async () => {
 })
 
 // 控制影片
-const isPlay = ref(false)
+const isPlay = ref<boolean>(false)
 const playVideo = () => {
   isPlay.value = true
   player.value?.playVideo()
@@ -51,6 +55,14 @@ const pauseVideo = () => {
   isPlay.value = false
   player.value?.pauseVideo()
 }
+
+// 暴露方法給父組件使用
+defineExpose({
+  playVideo,
+  pauseVideo,
+  player,
+  isPlay
+})
 </script>
 
 <template>

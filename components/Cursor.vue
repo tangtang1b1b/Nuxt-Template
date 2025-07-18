@@ -1,4 +1,4 @@
-<script setup>
+<script setup lang="ts">
 const props = defineProps({
   colorful: {
     type: Boolean,
@@ -9,7 +9,7 @@ const { colorful } = toRefs(props)
 const { $gsap } = useNuxtApp()
 const isCursor = ref(false)
 
-const setMouse = (e) => {
+const setMouse = (e: MouseEvent) => {
   if(isCursor.value){ return }
   isCursor.value = true
 
