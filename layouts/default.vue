@@ -1,15 +1,16 @@
-<script setup>
-import { useAllStore } from '@/store/all';
+<script setup lang="ts">
+import { useAllStore } from '@/store/all'
 const { allData } = toRefs(useAllStore())
 const { data } = await fetchRestful({ apiPath: '/data/index.json' })
-allData.value = data
+allData.value = data as typeof allData.value
+
 await useLoadingHandler().setLoadingComplete()
 </script>
 
 <template>
   <div>
     <LayoutHeader :data="allData?.menu" />
-    <main class="mx-auto max-w-[1920px] min-h-screen pt-[70px]">
+    <main class="mx-auto min-h-screen max-w-[1920px] pt-[70px]">
       <slot />
     </main>
     <LayoutFooter />

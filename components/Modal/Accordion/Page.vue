@@ -1,21 +1,26 @@
-<script setup>
-const props = defineProps({
+<script setup lang="ts">
+interface Props {
   data: {
-    type: Object,
-    default: () => ({
-      perPage: 10,
-      currentPage: 1,
-      lastPage: 20,
-      total: 200,
-    }),
-  },
+    perPage: number
+    currentPage: number
+    lastPage: number
+    total: number
+  }
+}
+const props = withDefaults(defineProps<Props>(), {
+  data: () => ({
+    perPage: 10,
+    currentPage: 1,
+    lastPage: 20,
+    total: 200,
+  }),
 })
 const { data } = toRefs(props)
 
-const emits = defineEmits(['upload:page'])
+const emits = defineEmits<{ 'upload:page': [value: number] }>()
 
 const currentPage = ref(1)
-const changePage = (page) => {
+const changePage = (page: number) => {
   if (page === 0 || page === data.value.lastPage + 1) return
   currentPage.value = page
   emits('upload:page', currentPage.value)
@@ -86,7 +91,7 @@ const changePage = (page) => {
             <div
               v-show="currentPage < 5"
               @click="changePage(3)"
-              :class="{ 'hover:!bg-indigo-600 !text-white !bg-indigo-600 !ring-0': currentPage === 3 && currentPage < 5 }"
+              :class="{ '!bg-indigo-600 !text-white !ring-0 hover:!bg-indigo-600': currentPage === 3 && currentPage < 5 }"
               class="z-10 focus:z-20 relative inline-flex cursor-pointer items-center px-4 py-2 text-sm font-semibold text-gray-900 ring-1 ring-inset ring-gray-300 hover:bg-gray-50 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
             >
               3
@@ -94,7 +99,7 @@ const changePage = (page) => {
             <div
               v-show="currentPage < 5"
               @click="changePage(4)"
-              :class="{ 'hover:!bg-indigo-600 !text-white !bg-indigo-600 !ring-0': currentPage === 4 && currentPage < 5 }"
+              :class="{ '!bg-indigo-600 !text-white !ring-0 hover:!bg-indigo-600': currentPage === 4 && currentPage < 5 }"
               class="z-10 focus:z-20 relative inline-flex cursor-pointer items-center px-4 py-2 text-sm font-semibold text-gray-900 ring-1 ring-inset ring-gray-300 hover:bg-gray-50 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
             >
               4
@@ -115,7 +120,7 @@ const changePage = (page) => {
               {{ currentPage > 4 ? `${currentPage - 1}` : '3' }}
             </div>
             <div
-              :class="{ 'hover:!bg-indigo-600 !text-white !bg-indigo-600 !ring-0': currentPage > 4 && currentPage < data.lastPage - 3 }"
+              :class="{ '!bg-indigo-600 !text-white !ring-0 hover:!bg-indigo-600': currentPage > 4 && currentPage < data.lastPage - 3 }"
               v-show="currentPage > 4 && currentPage < data.lastPage - 3"
               @click="changePage(currentPage > 4 ? currentPage : 4)"
               class="z-10 focus:z-20 relative inline-flex cursor-pointer items-center px-4 py-2 text-sm font-semibold text-gray-900 ring-1 ring-inset ring-gray-300 hover:bg-gray-50 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
@@ -131,7 +136,10 @@ const changePage = (page) => {
             </div>
             <!-- next -->
             <div
-              :class="{ 'hover:!bg-indigo-600 !text-white !bg-indigo-600 !ring-0': currentPage === data.lastPage - 4 && currentPage > data.lastPage - 4 }"
+              :class="{
+                '!bg-indigo-600 !text-white !ring-0 hover:!bg-indigo-600':
+                  currentPage === data.lastPage - 4 && currentPage > data.lastPage - 4,
+              }"
               v-show="currentPage > data.lastPage - 4"
               @click="changePage(data.lastPage - 4)"
               class="z-10 focus:z-20 relative inline-flex cursor-pointer items-center px-4 py-2 text-sm font-semibold text-gray-900 ring-1 ring-inset ring-gray-300 hover:bg-gray-50 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
@@ -140,7 +148,8 @@ const changePage = (page) => {
             </div>
             <div
               :class="{
-                'hover:!bg-indigo-600 !text-white !bg-indigo-600 !ring-0': currentPage === data.lastPage - 3 && currentPage > data.lastPage - 4,
+                '!bg-indigo-600 !text-white !ring-0 hover:!bg-indigo-600':
+                  currentPage === data.lastPage - 3 && currentPage > data.lastPage - 4,
               }"
               v-show="currentPage > data.lastPage - 4"
               @click="changePage(data.lastPage - 3)"
@@ -150,7 +159,8 @@ const changePage = (page) => {
             </div>
             <div
               :class="{
-                'hover:!bg-indigo-600 !text-white !bg-indigo-600 !ring-0': currentPage === data.lastPage - 2 && currentPage > data.lastPage - 4,
+                '!bg-indigo-600 !text-white !ring-0 hover:!bg-indigo-600':
+                  currentPage === data.lastPage - 2 && currentPage > data.lastPage - 4,
               }"
               v-show="currentPage > data.lastPage - 4"
               @click="changePage(data.lastPage - 2)"
@@ -160,7 +170,8 @@ const changePage = (page) => {
             </div>
             <div
               :class="{
-                'hover:!bg-indigo-600 !text-white !bg-indigo-600 !ring-0': currentPage === data.lastPage - 1 && currentPage > data.lastPage - 4,
+                '!bg-indigo-600 !text-white !ring-0 hover:!bg-indigo-600':
+                  currentPage === data.lastPage - 1 && currentPage > data.lastPage - 4,
               }"
               v-show="currentPage > data.lastPage - 4"
               @click="changePage(data.lastPage - 1)"
@@ -175,7 +186,7 @@ const changePage = (page) => {
             >
             <div
               :class="{
-                'hover:!bg-indigo-600 !text-white !bg-indigo-600 !ring-0': currentPage === data.lastPage && currentPage > data.lastPage - 4,
+                '!bg-indigo-600 !text-white !ring-0 hover:!bg-indigo-600': currentPage === data.lastPage && currentPage > data.lastPage - 4,
               }"
               @click="changePage(data.lastPage)"
               class="z-10 focus:z-20 relative inline-flex cursor-pointer items-center px-4 py-2 text-sm font-semibold text-gray-900 ring-1 ring-inset ring-gray-300 hover:bg-gray-50 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"

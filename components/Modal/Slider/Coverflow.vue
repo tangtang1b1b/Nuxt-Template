@@ -1,45 +1,34 @@
-<script setup>
+<script setup lang="ts">
+interface Props {
+  id?: string
+  paginationId?: string
+  slideData: unknown[]
+  spaceBetween?: number
+  autoplay?: boolean
+  loop?: boolean
+}
+
 const { width } = useWindowSize()
 import Swiper from 'swiper'
 import { Navigation, Pagination, Autoplay, EffectCoverflow } from 'swiper/modules'
 import 'swiper/css'
 import 'swiper/css/effect-coverflow'
 
-const props = defineProps({
-  id: {
-    type: String,
-    default: '',
-  },
-  paginationId: {
-    type: String,
-    default: '',
-  },
-  slideData: {
-    type: Array,
-    default: () => [],
-  },
-  spaceBetween: {
-    type: Number,
-    default: 24,
-  },
-  autoplay: {
-    type: Boolean,
-    default: false,
-  },
-  /**
-   * slides 數量盡量大於 slidesPerView + 1
-   */
-  loop: {
-    type: Boolean,
-    default: true,
-  },
+const props = withDefaults(defineProps<Props>(), {
+  id: '',
+  paginationId: '',
+  slideData: () => [],
+  spaceBetween: 24,
+  autoplay: false,
+  loop: true,
 })
+
 const { id, paginationId, spaceBetween, autoplay, slideData, loop } = toRefs(props)
 
-const swiper = ref(null)
-const nowIndex = ref(0)
+const swiper = ref<Swiper | null>(null)
+const nowIndex = ref<number>(0)
 
-const getCoverflowEffect = (windowWidth) => {
+const getCoverflowEffect = (windowWidth: number) => {
   if (windowWidth < 1024) {
     return {
       rotate: 0,
@@ -86,13 +75,13 @@ const swiperOptions = {
   centeredSlides: true,
   loop: loop.value,
   on: {
-    slideChangeTransitionEnd: (now) => {
+    slideChangeTransitionEnd: (now: Swiper) => {
       nowIndex.value = now.realIndex
     },
-    autoplayTimeLeft(s, time, progress) {
+    autoplayTimeLeft(s: Swiper, time: number, progress: number) {
       const bullets = document.querySelectorAll(`#${paginationId.value} .swiper-pagination-bullet`)
       bullets.forEach((bullet, i) => {
-        const bar = bullet.querySelector('.progress-bar')
+        const bar = bullet.querySelector('.progress-bar') as HTMLElement | null
         if (!bar) return
 
         if (i === s.realIndex) {
@@ -155,8 +144,8 @@ onMounted(() => {
     <div :id="id" class="swiper">
       <div class="swiper-wrapper">
         <slot :slot-slide-data="slideData" :slot-index="nowIndex">
-          <div class="swiper-slide" v-for="slide in slideData" :key="slide.src">
-            <img class="w-full" :src="slide?.src" alt="slide" />
+          <div class="swiper-slide" v-for="(slide, index) in slideData" :key="index">
+            <img class="w-full" :src="slide as string" alt="slide" />
           </div>
         </slot>
       </div>

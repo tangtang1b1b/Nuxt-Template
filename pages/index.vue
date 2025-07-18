@@ -1,7 +1,7 @@
-<script setup>
+<script setup lang="ts">
 const { t } = useI18n()
-const dot = ref('')
-const dotAnimation = ref(null)
+const dot = ref<string>('')
+const dotAnimation = ref<null | ReturnType<typeof setInterval>>(null)
 
 const init = () => {
   dotAnimation.value = setInterval(() => {

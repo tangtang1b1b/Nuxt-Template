@@ -1,4 +1,4 @@
-<script setup>
+<script setup lang="ts">
 import { useAllStore } from '@/store/all'
 const { isLoading } = toRefs(useAllStore())
 const { $gsap, $ScrollTrigger } = useNuxtApp()

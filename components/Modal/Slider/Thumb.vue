@@ -1,32 +1,28 @@
-<script setup>
+<script setup lang="ts">
+interface Props {
+  slideData: unknown[]
+  paginationId?: string
+  id?: string
+  id2?: string
+}
+
 import Swiper from 'swiper'
 import { FreeMode, Navigation, Thumbs, Autoplay, EffectFade, Pagination } from 'swiper/modules'
 import 'swiper/css'
 import 'swiper/css/effect-fade'
 
-const props = defineProps({
-  slideData: {
-    type: Array,
-    default: () => [],
-  },
-  paginationId: {
-    type: String,
-    default: '',
-  },
-  id: {
-    type: String,
-    default: '',
-  },
-  id2: {
-    type: String,
-    default: '',
-  },
+const props = withDefaults(defineProps<Props>(), {
+  slideData: () => [],
+  paginationId: '',
+  id: '',
+  id2: '',
 })
+
 const { slideData, paginationId, id, id2 } = toRefs(props)
 
-const emit = defineEmits(['update:realIndex'])
-const currentRealIndex = ref(0)
-const swiperThumbs = ref(null)
+const emit = defineEmits<{ 'update:realIndex': [index: number] }>()
+const currentRealIndex = ref<number>(0)
+const swiperThumbs = ref<Swiper | null>(null)
 
 // 監聽縮圖 Swiper 的初始化
 const swiperOptions = {
@@ -64,7 +60,7 @@ const swiperOptions2 = {
     prevEl: '.custom-prev',
   },
   on: {
-    slideChangeTransitionStart: (now) => {
+    slideChangeTransitionStart: (now: Swiper) => {
       currentRealIndex.value = now.realIndex
       emit('update:realIndex', now.realIndex)
     },
@@ -97,15 +93,15 @@ onMounted(() => {
   <div class="swiperThumbs">
     <div :id="id2" style="--swiper-navigation-color: #fff; --swiper-pagination-color: #fff" class="swiper mySwiper2">
       <div class="swiper-wrapper">
-        <div class="swiper-slide" v-for="(item, index) in slideData" :key="`main_${item.title}_${index}`">
-          <img class="aspect-[320/180] rounded-[10px] object-cover md:aspect-[300/168] lg:aspect-[16/9]" :src="item" />
+        <div class="swiper-slide" v-for="(item, index) in slideData" :key="`${id2}_${index}`">
+          <img class="aspect-[320/180] rounded-[10px] object-cover md:aspect-[300/168] lg:aspect-[16/9]" :src="item as string" />
         </div>
       </div>
     </div>
-    <div thumbsSlider="" :id="id" class="swiper mySwiper mt-[10px] md:mt-5">
+    <div :id="id" class="swiper mySwiper mt-[10px] md:mt-5">
       <div class="swiper-wrapper">
-        <div class="swiper-slide" v-for="(item, index) in slideData" :key="`${item.title}_${index}`">
-          <img class="aspect-[165/92] rounded-[4px] object-cover lg:aspect-[16/9] lg:rounded-[2px]" :src="item" />
+        <div class="swiper-slide" v-for="(item, index) in slideData" :key="`${id}_${index}`">
+          <img class="aspect-[165/92] rounded-[4px] object-cover lg:aspect-[16/9] lg:rounded-[2px]" :src="item as string" />
         </div>
       </div>
     </div>
@@ -115,7 +111,7 @@ onMounted(() => {
       </div>
 
       <div class="custom-navigation | flex gap-3 lg:gap-[30px]">
-        <button :class="{ '!text-sec-light !pointer-events-none': currentRealIndex === 0 }" class="custom-prev" @click="slidePrev">
+        <button :class="{ '!text-sec-light !pointer-events-none': currentRealIndex === 0 }" class="custom-prev">
           <svg class="hidden lg:block" xmlns="http://www.w3.org/2000/svg" width="36" height="36" viewBox="0 0 24 24">
             <path fill="currentColor" d="M15.41 7.41L14 6l-6 6 6 6 1.41-1.41L10.83 12z" />
           </svg>
@@ -126,7 +122,6 @@ onMounted(() => {
         <button
           :class="{ '!text-sec-light !pointer-events-none': currentRealIndex === slideData.length - 1 }"
           class="custom-next"
-          @click="slideNext"
         >
           <svg class="hidden lg:block" xmlns="http://www.w3.org/2000/svg" width="36" height="36" viewBox="0 0 24 24">
             <path fill="currentColor" d="M10 6L8.59 7.41 13.17 12l-4.58 4.59L10 18l6-6z" />

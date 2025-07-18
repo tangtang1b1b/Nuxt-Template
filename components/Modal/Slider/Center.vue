@@ -1,41 +1,30 @@
-<script setup>
+<script setup lang="ts">
+interface Props {
+  id?: string
+  paginationId?: string
+  slideData: unknown[]
+  spaceBetween?: number
+  autoplay?: boolean
+  loop?: boolean
+}
+
 import Swiper from 'swiper'
 import { Navigation, Pagination, Autoplay } from 'swiper/modules'
 import 'swiper/css'
 
-const props = defineProps({
-  id: {
-    type: String,
-    default: '',
-  },
-  paginationId: {
-    type: String,
-    default: '',
-  },
-  slideData: {
-    type: Array,
-    default: () => [],
-  },
-  spaceBetween: {
-    type: Number,
-    default: 24,
-  },
-  autoplay: {
-    type: Boolean,
-    default: false,
-  },
-  /**
-  * slides 數量盡量大於 slidesPerView + 1 
-  */
-  loop: {
-    type: Boolean,
-    default: true,
-  },
+const props = withDefaults(defineProps<Props>(), {
+  id: '',
+  paginationId: '',
+  slideData: () => [],
+  spaceBetween: 24,
+  autoplay: false,
+  loop: true,
 })
+
 const { id, paginationId, slideData, spaceBetween, autoplay, loop } = toRefs(props)
 
-const swiper = ref(null)
-const nowIndex = ref(0)
+const swiper = ref<Swiper | null>(null)
+const nowIndex = ref<number>(0)
 
 const swiperOptions = {
   slidesPerView: 1.35,
@@ -56,7 +45,7 @@ const swiperOptions = {
   centeredSlides: true,
   loop: loop.value,
   on: {
-    slideChangeTransitionEnd: (now) => {
+    slideChangeTransitionEnd: (now: Swiper) => {
       nowIndex.value = now.realIndex
     },
   },
@@ -75,16 +64,6 @@ const swiperOptions = {
 onMounted(() => {
   Swiper.use([Navigation, Pagination, Autoplay])
   swiper.value = new Swiper(`#${id.value}`, swiperOptions)
-  // 內容有變動但畫面沒變動時可嘗試執行
-  // watch(slides, () => {
-  //   if (swiper.value && typeof swiper.value.destroy === 'function') {
-  //     swiper.value.destroy(true, true)
-  //   }
-  //   nextTick(()=>{
-  //     Swiper.use([Navigation, Pagination])
-  //     swiper.value = new Swiper(`#${id.value}`, swiperOptions)
-  //   })
-  // })
 })
 </script>
 
@@ -93,8 +72,8 @@ onMounted(() => {
     <div :id="id" class="swiper">
       <div class="swiper-wrapper">
         <slot :slot-slide-data="slideData" :slot-index="nowIndex">
-          <div class="swiper-slide" v-for="slide in slideData" :key="slide.src">
-            <img class="w-full" :src="slide?.src" alt="slide" />
+          <div class="swiper-slide" v-for="(slide, index) in slideData" :key="index">
+            <img class="w-full" :src="slide as string" alt="slide" />
           </div>
         </slot>
       </div>

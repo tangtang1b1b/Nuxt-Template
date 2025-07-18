@@ -1,17 +1,17 @@
-<script setup>
-const props = defineProps({
-  modelValue: {
-    type: Boolean,
-    default: false,
-  },
-  isOpen: {
-    type: Boolean,
-    default: false,
-  },
+<script setup lang="ts">
+interface Props {
+  modelValue?: boolean
+  isOpen?: boolean
+}
+
+const props = withDefaults(defineProps<Props>(), {
+  modelValue: false,
+  isOpen: false,
 })
+
 const { modelValue, isOpen } = toRefs(props)
 
-const items = ref([
+const items = ref<string[]>([
   '/images/default.jpg',
   '/images/default.jpg',
   '/images/default.jpg',
@@ -21,7 +21,7 @@ const items = ref([
   '/images/default.jpg',
 ])
 
-const emits = defineEmits(['update:modelValue'])
+const emits = defineEmits<{ 'update:modelValue': [value: boolean] }>()
 
 const closeModal = () => {
   emits('update:modelValue', false)
@@ -34,13 +34,13 @@ const closeModal = () => {
       <AtomBackdrop class="pointer-events-auto" :is-open="isOpen" @click="closeModal" />
       <Transition name="fade" appear>
         <div
-          class="absolute left-1/2 pointer-events-auto top-1/2 flex w-[700px] -translate-x-1/2 -translate-y-1/2 flex-col justify-between rounded-[22px] bg-white px-[30px] py-[18px] shadow-popup"
+          class="pointer-events-auto absolute left-1/2 top-1/2 flex w-[700px] -translate-x-1/2 -translate-y-1/2 flex-col justify-between rounded-[22px] bg-white px-[30px] py-[18px] shadow-popup"
         >
           <div>
             <ModalSliderBasic id="default_slider" pagination-id="default_slider_Pagination" :slide-data="items" :autoplay="false">
               <template #default="{ slotSlideData, slotIndex }">
-                <div class="swiper-slide" v-for="slide in slotSlideData" :key="slide.src">
-                  <img class="aspect-[16/9] size-full rounded-lg object-cover" :src="fetchImg(slide)" alt="slide" />
+                <div class="swiper-slide" v-for="(slide, index) in slotSlideData" :key="index">
+                  <img class="aspect-[16/9] size-full rounded-lg object-cover" :src="fetchImg(slide as string)" alt="slide" />
                 </div>
               </template>
             </ModalSliderBasic>
