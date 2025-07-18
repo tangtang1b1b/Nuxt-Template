@@ -1,39 +1,46 @@
-<script setup>
+<script setup lang="ts">
+interface Props {
+  id?: string
+  paginationId?: string
+  slideData: unknown[]
+  spaceBetween?: number
+  loop?: boolean
+}
+
+interface SwiperOptions {
+  slidesPerView: 'auto' | number
+  spaceBetween: number
+  speed: number
+  grabCursor: boolean
+  centeredSlides: boolean
+  loop: boolean
+  on: {
+    slideChangeTransitionEnd: (swiper: Swiper) => void
+  }
+  pagination?: {
+    el: string
+    clickable: boolean
+  } | false
+}
+
 import Swiper from 'swiper'
 import { Pagination } from 'swiper/modules'
 import 'swiper/css'
 
-const props = defineProps({
-  id: {
-    type: String,
-    default: '',
-  },
-  paginationId: {
-    type: String,
-    default: '',
-  },
-  slideData: {
-    type: Array,
-    default: () => [],
-  },
-  spaceBetween: {
-    type: Number,
-    default: 24,
-  },
-  /**
-  * slides 數量盡量大於 slidesPerView + 1 
-  */
-  loop: {
-    type: Boolean,
-    default: false,
-  },
+const props = withDefaults(defineProps<Props>(), {
+  id: '',
+  paginationId: '',
+  slideData: () => [],
+  spaceBetween: 24,
+  loop: true,
 })
+
 const { id, paginationId, slideData, spaceBetween, loop } = toRefs(props)
 
-const swiper = ref(null)
-const nowIndex = ref(0)
+const swiper = ref<Swiper | null>(null)
+const nowIndex = ref<number>(0)
 
-const swiperOptions = {
+const swiperOptions: SwiperOptions = {
   slidesPerView: 'auto',
   spaceBetween: spaceBetween.value,
   speed: 300,
@@ -51,7 +58,7 @@ const swiperOptions = {
   centeredSlides: false,
   loop: loop.value,
   on: {
-    slideChangeTransitionEnd: (now) => {
+    slideChangeTransitionEnd: (now: Swiper) => {
       nowIndex.value = now.realIndex
     },
   },
@@ -78,16 +85,6 @@ const slideNext = () => {
 onMounted(() => {
   Swiper.use([Pagination])
   swiper.value = new Swiper(`#${id.value}`, swiperOptions)
-  // 內容有變動但畫面沒變動時可嘗試執行
-  // watch(slides, () => {
-  //   if (swiper.value && typeof swiper.value.destroy === 'function') {
-  //     swiper.value.destroy(true, true)
-  //   }
-  //   nextTick(()=>{
-  //     Swiper.use([Navigation, Pagination])
-  //     swiper.value = new Swiper(`#${id.value}`, swiperOptions)
-  //   })
-  // })
 })
 </script>
 
@@ -96,8 +93,8 @@ onMounted(() => {
     <div :id="id" class="swiper">
       <div class="swiper-wrapper">
         <slot :slot-slide-data="slideData" :slot-index="nowIndex">
-          <div class="swiper-slide" v-for="slide in slideData" :key="slide.src">
-            <img class="size-full rounded-xl object-cover" :src="fetchImg(slide)" alt="slide" />
+          <div class="swiper-slide" v-for="(slide, index) in slideData" :key="index">
+            <img class="size-full rounded-xl object-cover" :src="fetchImg(slide as string)" alt="slide" />
           </div>
         </slot>
       </div>

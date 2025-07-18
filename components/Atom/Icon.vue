@@ -1,18 +1,15 @@
-<script setup>
-const props = defineProps({
-  name: {
-    type: String,
-    required: true,
-  },
-  color: {
-    type: String,
-    default: '#333',
-  },
-  size: {
-    type: Number,
-    default: 24,
-  }
+<script setup lang="ts">
+interface Props {
+  name: string
+  color?: string
+  size?: number
+}
+const props = withDefaults(defineProps<Props>(), {
+  name: '',
+  color: '#333',
+  size: 24,
 })
+
 const { name, color, size } = toRefs(props)
 
 const svgName = computed(() => {

@@ -6,9 +6,7 @@ export default defineNuxtConfig({
   ssr: true,
 
   app: {
-    router: {
-      base: process.env.APP_URL || '/',
-    },
+    baseURL: '/',
     head: {
       title: process.env.APP_TITLE,
       htmlAttrs: {
@@ -38,7 +36,6 @@ export default defineNuxtConfig({
         { rel: 'stylesheet', href: 'https://fonts.googleapis.com/css2?family=Noto+Serif+TC:wght@200..900&display=swap' },
       ],
       noscript: [
-        // <noscript>JavaScript is required</noscript>
         { children: 'JavaScript is required' },
       ],
     },
@@ -55,13 +52,34 @@ export default defineNuxtConfig({
         autoImports: ['defineStore', 'acceptHMRUpdate'],
       },
     ],
+    [
+      '@nuxtjs/i18n',
+      {
+        defaultLocale: 'zh',
+        locales: [
+          {
+            code: 'en',
+            iso: 'en-US',
+            file: 'en.json',
+            name: 'English',
+          },
+          {
+            code: 'zh',
+            iso: 'zh-TW',
+            file: 'zh.json',
+            name: '中文',
+          },
+        ],
+        strategy: 'prefix_except_default',
+        detectBrowserLanguage: {
+          useCookie: true,
+          cookieKey: 'i18n_redirected',
+          redirectOn: 'root',
+        },
+      },
+    ],
     '@vueuse/nuxt',
-    '@nuxtjs/i18n',
   ],
-
-  pinia: {
-    autoImports: ['defineStore'],
-  },
 
   vite: {
     plugins: [
@@ -71,30 +89,6 @@ export default defineNuxtConfig({
         customDomId: '__svg__icons__dom__',
       }),
     ],
-  },
-
-  i18n: {
-    defaultLocale: 'zh',
-    locales: [
-      {
-        code: 'en',
-        iso: 'en-US',
-        file: 'en.json',
-        name: 'English',
-      },
-      {
-        code: 'zh',
-        iso: 'zh-TW',
-        file: 'zh.json',
-        name: '中文',
-      },
-    ],
-    strategy: 'prefix_except_default',
-    detectBrowserLanguage: {
-      useCookie: true,
-      cookieKey: 'i18n_redirected',
-      redirectOn: 'root',
-    },
   },
 
   css: ['~/assets/css/tailwind.css'],
@@ -123,5 +117,5 @@ export default defineNuxtConfig({
   },
 
   devtools: { enabled: process.env.NODE_ENV === 'development' },
-  compatibilityDate: '2025-01-23',
+  compatibilityDate: '2025-07-17',
 })

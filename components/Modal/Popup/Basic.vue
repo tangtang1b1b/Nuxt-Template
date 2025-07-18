@@ -1,17 +1,17 @@
-<script setup>
-const props = defineProps({
-  modelValue: {
-    type: Boolean,
-    default: false,
-  },
-  isOpen: {
-    type: Boolean,
-    default: false,
-  },
+<script setup lang="ts">
+interface Props {
+  modelValue?: boolean
+  isOpen?: boolean
+}
+
+const props = withDefaults(defineProps<Props>(), {
+  modelValue: false,
+  isOpen: false,
 })
+
 const { modelValue, isOpen } = toRefs(props)
 
-const emits = defineEmits(['update:modelValue'])
+const emits = defineEmits<{ 'update:modelValue': [value: boolean] }>()
 
 const closeModal = () => {
   emits('update:modelValue', false)
@@ -24,7 +24,7 @@ const closeModal = () => {
       <AtomBackdrop class="pointer-events-auto" :is-open="isOpen" @click="closeModal" />
       <Transition name="fade" appear>
         <div
-          class="absolute pointer-events-auto left-1/2 top-1/2 flex h-[310px] w-[290px] -translate-x-1/2 -translate-y-1/2 flex-col justify-between rounded-[22px] bg-white px-[30px] py-[18px] shadow-popup"
+          class="pointer-events-auto absolute left-1/2 top-1/2 flex h-[310px] w-[290px] -translate-x-1/2 -translate-y-1/2 flex-col justify-between rounded-[22px] bg-white px-[30px] py-[18px] shadow-popup"
         >
           <div>
             <div class="mb-[25px] text-[#1DA539]">

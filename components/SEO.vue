@@ -1,22 +1,20 @@
-<script setup>
+<script setup lang="ts">
+interface Props {
+  title?: string
+  desc?: string
+  image?: string | undefined
+  url?: string
+  keywords?: string
+}
+
 const config = useRuntimeConfig()
-const props = defineProps({
-  title: {
-    type: String,
-    default: ''
-  },
-  desc: {
-    type: String,
-    default: ''
-  },
-  image: {
-    type: [String, Boolean],
-    default: ''
-  },
-  url: {
-    type: String,
-    default: ''
-  }
+
+const props = withDefaults(defineProps<Props>(), {
+  title: '',
+  desc: '',
+  image: '',
+  url: '',
+  keywords: '',
 })
 
 useServerSeoMeta({
@@ -42,10 +40,6 @@ useSeoMeta({
 <template>
   <Head>
     <Title>{{ props.title || config.public.APP_TITLE }}</Title>
-    <Meta
-      hid="description"
-      name="description"
-      :content="props.desc || config.public.APP_DESC"
-    />
+    <Meta hid="description" name="description" :content="props.desc || config.public.APP_DESC" />
   </Head>
 </template>

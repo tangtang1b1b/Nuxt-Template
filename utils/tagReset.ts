@@ -1,8 +1,8 @@
 import { useAllStore } from '@/store/all'
 
-export const useLoadingWatcher = (watchedValue) => {
+export const useLoadingWatcher = (index: number | string) => {
   const { tagChange } = toRefs(useAllStore())
-  watch(watchedValue, () => {
+  watch(() => index, () => {
     tagChange.value = true
     setTimeout(() => {
       tagChange.value = false

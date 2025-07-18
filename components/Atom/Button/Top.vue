@@ -1,4 +1,4 @@
-<script setup>
+<script setup lang="ts">
 import { useAllStore } from '@/store/all'
 const { isScroll } = toRefs(useAllStore())
 const { $gsap, $lenis } = useNuxtApp()
@@ -14,7 +14,7 @@ const toTop = () => {
   $lenis.scrollTo(0)
 }
 
-const init = (wrapper) => {
+const init = (wrapper: HTMLElement) => {
   const circle = document.querySelector('#progressRingCircle')
   if (!circle) {
     return

@@ -1,8 +1,8 @@
-<script setup>
-const search = ref('')
+<script setup lang="ts">
+const search = ref<string>('')
 
 const doSearch = () => {
-  if(search.value.trim() === '') return
+  if (search.value.trim() === '') return
 
   search.value = ''
 }
